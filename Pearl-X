@@ -18,4 +18,4 @@
 |                |                                                 |
 |                | .cmds                             List commands |
 ----------------------------------------------------------------]]--
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Faacts/Side/main/Pearl-X/Source", true))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Faacts/Pearl-X/main/Source", true))()
