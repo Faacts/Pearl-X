@@ -2595,6 +2595,11 @@ CMDS.commands = {
 	["alias"] = "Creates a custom alias for a command (can not replace commands)",
 	["delalias"] = "Removes a custom alias",
 	["aliases"] = "Lists custom aliases",
+	["spawnpoint"] = "Creates a spawn point",
+	["unspawnpoint"] = "Deletes spawn point",
+	["setfpscap"] = "Sets Fps cap, type 'none' for unlimited",
+	["console"] = "Opens a custom Console",
+	["fullbright"] = "Removes shadows and brightens up the game."
 }
 CMDS.usage = {
 	["promptnew"] = "(str/name)",
@@ -3000,11 +3005,11 @@ CMDS.aliases = {
 	["unview"] = "unspectate",
 	["rsaves"] = "resetsaves",
 	["ssaves"] = "savesaves",
-	["agepr"] = "ageprivate",
+	["age"] = "ageprivate",
 	["agepu"] = "agepublic",
-	["idpr"] = "idprivate",
+	["id"] = "idprivate",
 	["idpu"] = "idpublic",
-	["vrpr"] = "vrprivate",
+	["vr"] = "vrprivate",
 	["vrpu"] = "vrpublic",
 	["profile"] = "profileinfo",
 	["closeprofile"] = "closeprofileinfo",
@@ -3014,7 +3019,7 @@ CMDS.aliases = {
 	["uns"] = "unspam",
 	["ss"] = "spamspeed",
 	["dicepu"] = "dicepublic",
-	["dicepr"] = "diceprivate",
+	["dice"] = "diceprivate",
 	["numberpu"] = "numberpublic",
 	["numberpr"] = "numberprivate",
 	["pluginload"] = "plugin",
@@ -3083,6 +3088,7 @@ CMDS.aliases = {
 	["script"] = "using",
 	["iuse"] = "using",
 	["jdpr"] = "joindateprivate",
+	["joindate"] = "joindateprivate",
 	["jdpu"] = "joindatepublic",
 	["pp"] = "ppsize",
 	["gay"] = "gaysize",
@@ -3128,7 +3134,7 @@ CMDS.aliases = {
 	["unpesp"] = "unpartesp",
 	["emotespeed"] = "animspeed",
 	["rappublic"] = "rappu",
-	["rapprivate"] = "rappr",
+	["rap"] = "rappr",
 	["runa"] = "removeunanchored",
 	["reet"] = "retard",
 	["unreet"] = "unretard",
@@ -3276,7 +3282,7 @@ CMDS.aliases = {
 	["rleftlowerleg"] = "removeleftlowerleg",
 	["rllleg"] = "removeleftlowerleg",
 	["aidpu"] = "appearanceidpublic",
-	["aidpr"] = "appearanceidprivate",
+	["aid"] = "appearanceidprivate",
 	["niltp"] = "nilgoto",
 	["nilto"] = "nilgoto",
 	["nilfreetp"] = "nilfreegoto",
@@ -3384,6 +3390,11 @@ CMDS.aliases = {
 	["ctrltplimit"] = "clicktplimit",
 	["unctrltplimit"] = "unclicktplimit",
 	["headsit"] = "piggyback",
+	["spawn"] = "spawnpoint",
+	["nospawn"] = "unspawnpoint",
+	["unspawn"] = "unspawnpoint",
+	["fpscap"] = "setfpscap",
+	["maxfps"] = "setfpscap",
 }
 
 local function suggestions_update()
@@ -7127,7 +7138,7 @@ end
 
 function useCommand.remotespy()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/78n/SimpleSpy/main/SimpleSpySource.lua"))()
-	opx("-","Simple Spy has loaded (credits to exxtremestuffs)")
+	opx("-","Simple Spy has loaded")
 end
 
 function useCommand.playerstalker()
@@ -7283,20 +7294,22 @@ function useCommand.removesky()
 	end
 end
 
+origsettings = {abt = cmdl.Ambient, brt = cmdl.Brightness, ctime = cmdl.ClockTime, csbo = cmdl.ColorShift_Bottom, csto = cmdl.ColorShift_Top, exco = cmdl.ExposureCompensation, fco = cmdl.FogColor, fe = cmdl.FogEnd, fs = cmdl.FogStart, gl = cmdl.GeographicLatitude, gs = cmdl.GlobalShadows, oabt = cmdl.OutdoorAmbient, outl = cmdl.Outlines}
+
 function useCommand.restorelighting()
-	cmdl.Ambient = Color3.new(0.715, 0.715, 0.715)
-	cmdl.Brightness = 1
-	cmdl.ClockTime = 14
-	cmdl.ColorShift_Bottom = Color3.new(0, 0, 0)
-	cmdl.ColorShift_Top = Color3.new(0, 0, 0)
-	cmdl.ExposureCompensation = 0
-	cmdl.FogColor = Color3.new(0.754, 0.754, 0.754)
-	cmdl.FogEnd = 100000
-	cmdl.FogStart = 0
-	cmdl.GeographicLatitude = 41.73
-	cmdl.GlobalShadows = false
-	cmdl.OutdoorAmbient = Color3.new(0.400, 0.400, 0.400)
-	cmdl.Outlines = true
+	cmdl.Ambient = origsettings.abt
+	cmdl.Brightness = origsettings.brt
+	cmdl.ClockTime = origsettings.ctime
+	cmdl.ColorShift_Bottom = origsettings.csbo
+	cmdl.ColorShift_Top = origsettings.csto
+	cmdl.ExposureCompensation = origsettings.exco
+	cmdl.FogColor = origsettings.fco
+	cmdl.FogEnd = origsettings.fe
+	cmdl.FogStart = origsettings.fs
+	cmdl.GeographicLatitude = origsettings.gl
+	cmdl.GlobalShadows = origsettings.gs
+	cmdl.OutdoorAmbient = origsettings.oabt
+	cmdl.Outlines = origsettings.outl
 	opx("-","Restored lighting to original settings")
 end
 
@@ -9626,129 +9639,102 @@ function useCommand.phone()
 end
 
 function useCommand.compliment()
-	if arguments[2] then
-		target = findplr(arguments[2])
-		if target then
-			local compPick = {
-				"Them toes lookin cute",
-				"You have very nice shoes",
-				"If I'm what made your day then you're what made this world go round, along with making it a better place just from being here with everyone else.",
-				"You're a nice person, and i hope you have an amazing week",
-				"You somewhat made me kinda sorta smile I guess",
-				"Your avatar looks awesome",
-				"Your name makes me smile",
-				"You are the best person ever",
-				"If I could I would hug you",
-				"You make me happy",
-				"You have brightened up my day",
-				"You are the most amazing person I've ever met",
-				"Your avatar looks nice today",
-				"You are an amazing person",
-				"You are the king/queen",
-				"Don't drop your crown"
-			}
-			local value = math.random(1,#compPick)
-			local picked_value = compPick[value]
-			opx("-","You complimented "..target.Name)
-			sayremote:FireServer(tostring(picked_value)..", "..target.Name, "All")
-		else
-			opx("*","Player does not exist!")
-		end
-	else
-		opx("*","2 arguments are needed for this command!")
-	end
+	local compPick = {
+		"Them toes lookin cute",
+		"You have very nice shoes",
+		"If I'm what made your day then you're what made this world go round, along with making it a better place just from being here with everyone else.",
+		"You're a nice person, and i hope you have an amazing week",
+		"You somewhat made me kinda sorta smile I guess",
+		"Your avatar looks awesome",
+		"Your name makes me smile",
+		"You are the best person ever",
+		"If I could I would hug you",
+		"You make me happy",
+		"You have brightened up my day",
+		"You are the most amazing person I've ever met",
+		"Your avatar looks nice today",
+		"You are an amazing person",
+		"You are the king/queen",
+		"Don't drop your crown"
+	}
+	local value = math.random(1,#compPick)
+	local picked_value = compPick[value]
+	opx("-","You complimented someone")
+	sayremote:FireServer(tostring(picked_value), "All")
 end
 
 function useCommand.roast()
-	if arguments[2] then
-		target = findplr(arguments[2])
-		if target then
-			local roastPick = {
-				"Anne Frank hid better then you",
-				"Go to bed",
-				"You need a shower",
-				"You look like a barbie doll which i gave a makeover with my markers",
-				"Your momma back built like a skate ramp I can do an ollie off her",
-				"You look like the 1% of germs that hand-soap doesn't kill",
-				"Boy u literally be smelling like tv oil",
-				"No wonder your parents hate you",
-				"You haven't had any neurological brain development in the last decade",
-				"I will build a sandcastle out of your dead nans ashes",
-				"Your brain has the capacity of a dried sea sponge",
-				"You make me cringe, I literally want to quit this game because of you",
-				"Your outfit is horrendous",
-				"Your name is horrendous",
-				"Your IQ is so low that even scientists cant zoom in on it",
-				"You are a femmie",
-				"You are fat",
-				"You stink of your nans cremation",
-				"How many people does it take to screw in a lightbulb? 20 of your kind",
-				"I can smell you through the screen",
-				"Candy shop got robbed, didn't know you did it",
-				"You are poor",
-				"Your brain is the size of an average ants",
-				"Everything you've worked for, your whole life is embarassing",
-				"Go back to school",
-				"Are you dumb or just young",
-				"You make me feel e-sick",
-				"I very much dislike you",
-				"Settle along you peasent",
-				"You are worth nothing",
-				"I hope you suffer",
-				"Your words, they make no sense",
-				"Please leave the server you cretin",
-				"You make me sick",
-				"Huh? Didn't know infants could play roblox",
-				"I bet you live in a poverty stricken country",
-				"You belong in the special ed class",
-				"Is it just me or does someone smell, nvm thats just",
-				"Is it just me or is someone dumb, nvm thats just",
-				"Is it just me or is someone fat, nvm thats just"
-			}
-			local value = math.random(1,#roastPick)
-			local picked_value = roastPick[value]
-			opx("-","You roasted "..target.Name)
-			sayremote:FireServer(tostring(picked_value)..", "..target.Name, "All")
-		else
-			opx("*","Player does not exist!")
-		end
-	else
-		opx("*","2 arguments are needed for this command!")
-	end
+	local roastPick = {
+		"Anne Frank hid better then you",
+		"Go to bed",
+		"You need a shower",
+		"You look like a barbie doll which i gave a makeover with my markers",
+		"Your momma back built like a skate ramp I can do an ollie off her",
+		"You look like the 1% of germs that hand-soap doesn't kill",
+		"Boy u literally be smelling like tv oil",
+		"No wonder your parents hate you",
+		"You haven't had any neurological brain development in the last decade",
+		"I will build a sandcastle out of your dead nans ashes",
+		"Your brain has the capacity of a dried sea sponge",
+		"You make me cringe, I literally want to quit this game because of you",
+		"Your outfit is horrendous",
+		"Your name is horrendous",
+		"Your IQ is so low that even scientists cant zoom in on it",
+		"You are a femmie",
+		"You are fat",
+		"You stink of your nans cremation",
+		"How many people does it take to screw in a lightbulb? 20 of your kind",
+		"I can smell you through the screen",
+		"Candy shop got robbed, didn't know you did it",
+		"You are poor",
+		"Your brain is the size of an average ants",
+		"Everything you've worked for, your whole life is embarassing",
+		"Go back to school",
+		"Are you dumb or just young",
+		"You make me feel e-sick",
+		"I very much dislike you",
+		"Settle along you peasent",
+		"You are worth nothing",
+		"I hope you suffer",
+		"Your words, they make no sense",
+		"Please leave the server you cretin",
+		"You make me sick",
+		"Huh? Didn't know infants could play roblox",
+		"I bet you live in a poverty stricken country",
+		"You belong in the special ed class",
+		"Is it just me or does someone smell, nvm thats just",
+		"Is it just me or is someone dumb, nvm thats just",
+		"Is it just me or is someone fat, nvm thats just"
+	}
+	local value = math.random(1,#roastPick)
+	local picked_value = roastPick[value]
+	opx("-","You roasted someone")
+	sayremote:FireServer(tostring(picked_value), "All")
 end
 
 function useCommand.rizz()
-	if arguments[2] then
-		target = findplr(arguments[2])
-		if target then
-			local rizzPick = {
-				"I got 206 bones in my body but when I see you I got 207",
-				"If you jingle my bells you will find more snow than usual",
-				"A relationship is 50/50 I take your last name and you scream my first",
-				"No pencil and paper, but you still draw my attention",
-				"I'm not gonna use google anymore because when i saw you i knew the search was over",
-				"Are you a footballer because you look like a keeper",
-				"Is it just the Wi-Fi or am I really feeling a connection",
-				"Is it your birthday today? why you carrying all that cake",
-				"I didn’t win the World Cup but we can still get messi",
-				"What do crocodiles do when they are mad? Snap?",
-				"All the pick up lines are taken so I’ll just take you",
-				"Are you from France because Eifel for you",
-				"My love for you is like diarrhea, i just cant hold it in",
-				"I'm not a photographer, although i can picture me and you together",
-				"Are you from Tennessee? because you're the only 10 i see",
-				"Are you a map? Because I keep getting lost in your eyes"
-			}
-			local value = math.random(1,#rizzPick)
-			local picked_value = rizzPick[value]
-			opx("-","You rizzed "..target.Name)
-			sayremote:FireServer(tostring(picked_value)..", "..target.Name, "All")
-		else
-			opx("*","Player does not exist!")
-		end
-	else
-		opx("*","2 arguments are needed for this command!")
-	end
+	local rizzPick = {
+		"I got 206 bones in my body but when I see you I got 207",
+		"If you jingle my bells you will find more snow than usual",
+		"A relationship is 50/50 I take your last name and you scream my first",
+		"No pencil and paper, but you still draw my attention",
+		"I'm not gonna use google anymore because when i saw you i knew the search was over",
+		"Are you a footballer because you look like a keeper",
+		"Is it just the Wi-Fi or am I really feeling a connection",
+		"Is it your birthday today? why you carrying all that cake",
+		"I didn’t win the World Cup but we can still get messi",
+		"What do crocodiles do when they are mad? Snap?",
+		"All the pick up lines are taken so I’ll just take you",
+		"Are you from France because Eifel for you",
+		"My love for you is like diarrhea, i just cant hold it in",
+		"I'm not a photographer, although i can picture me and you together",
+		"Are you from Tennessee? because you're the only 10 i see",
+		"Are you a map? Because I keep getting lost in your eyes"
+	}
+	local value = math.random(1,#rizzPick)
+	local picked_value = rizzPick[value]
+	opx("-","You rizzed someone")
+	sayremote:FireServer(tostring(picked_value), "All")
 end
 
 function useCommand.singinfo()
@@ -16110,6 +16096,120 @@ function useCommand.aliases()
 	end
 	opxL("Aliases", aliases_str)
 	return opx("-", "Listed aliases")
+end
+
+function getRoot(char)
+	local rootPart = char:FindFirstChild('HumanoidRootPart') or char:FindFirstChild('Torso') or char:FindFirstChild('UpperTorso')
+	return rootPart
+end
+
+local refreshCmd = false
+function refresh(plr)
+	refreshCmd = true
+	local Human = plr.Character and plr.Character:FindFirstChildOfClass("Humanoid", true)
+	local pos = Human and Human.RootPart and Human.RootPart.CFrame
+	local pos1 = workspace.CurrentCamera.CFrame
+	respawn(plr)
+	task.spawn(function()
+		plr.CharacterAdded:Wait():WaitForChild("Humanoid").RootPart.CFrame, workspace.CurrentCamera.CFrame = pos, wait() and pos1
+		refreshCmd = false
+	end)
+end
+
+function onDied()
+	task.spawn(function()
+		if pcall(function() cmdp.LocalPlayer.Character:FindFirstChildOfClass('Humanoid') end) and cmdp.LocalPlayer.Character:FindFirstChildOfClass('Humanoid') then
+			cmdp.LocalPlayer.Character:FindFirstChildOfClass('Humanoid').Died:Connect(function()
+				if getRoot(cmdp.LocalPlayer.Character) then
+					lastDeath = getRoot(cmdp.LocalPlayer.Character).CFrame
+				end
+			end)
+		else
+			wait(2)
+			onDied()
+		end
+	end)
+end
+
+spDelay = 0.1
+cmdp.LocalPlayer.CharacterAdded:Connect(function()
+	repeat wait() until getRoot(cmdp.LocalPlayer.Character)
+
+	pcall(function()
+		if spawnpoint and not refreshCmd and spawnpos ~= nil then
+			wait(spDelay)
+			getRoot(cmdp.LocalPlayer.Character).CFrame = spawnpos
+		end
+	end)
+
+	onDied()
+end)
+
+onDied()
+
+function useCommand.spawnpoint()
+	spawnpos = getRoot(cmdlp.Character).CFrame
+	spawnpoint = true
+	opx("-","Created Spawn point at "..tostring(spawnpos))
+end
+
+function useCommand.unspawnpoint()
+	spawnpoint = false
+	opx("-","Removed Spawn point")
+end
+
+function useCommand.setfpscap()
+    if setfpscap and type(setfpscap) == "function" then
+        local num = tonumber(arguments[2]) or 1e6 -- convert argument to number
+        if arguments[2] == 'none' then
+            setfpscap(1e6)
+            opx("-", "Set fps cap to infinite")
+        elseif num > 0 then
+            setfpscap(num)
+            opx("-", "Set fps cap to "..num)
+        else
+            opx("*", "2 arguments required")
+            opx("*", "Provide a number above 0 or 'none'")
+        end
+    else
+        opx("*", "Your exploit doesn't support this command")
+    end
+end
+
+function useCommand.console()
+	opx("-", "Loading Console")
+	local _, str = pcall(function()
+		return game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/console.lua", true)
+	end)
+
+	local s, e = loadstring(str)
+	if typeof(s) ~= "function" then
+		return
+	end
+
+	local success, message = pcall(s)
+	if (not success) then
+		if printconsole then
+			printconsole(message)
+		elseif printoutput then
+			printoutput(message)
+		end
+	end
+	wait(1)
+	opx("-", "Loaded Console, Press F9 to open")
+end
+
+function useCommand.fullbright()
+	cmdl.FogColor = Color3.fromRGB(255, 255, 255)
+	cmdl.FogEnd = math.huge
+	cmdl.FogStart = math.huge
+	cmdl.Ambient = Color3.fromRGB(255, 255, 255)
+	cmdl.Brightness = 5
+	cmdl.ColorShift_Bottom = Color3.fromRGB(255, 255, 255)
+	cmdl.ColorShift_Top = Color3.fromRGB(255, 255, 255)
+	cmdl.OutdoorAmbient = Color3.fromRGB(255, 255, 255)
+	cmdl.Outlines = true
+	opx("-", "Fullbright loaded")
 end
 
 user.Changed:connect(function()
