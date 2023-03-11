@@ -1977,16 +1977,16 @@ CMDS.commands = {
 	["removeanim"] = "Removes your characters animations.",
 	["restoreanim"] = "Restores your characters animations.",
 	["resizehead"] = "Resizes your characters head.",
-	--["removeshirt"] = "Removes your characters shirt.",
-	--["removetshirt"] = "Removes your characters tshirt",
-	--["removepants"] = "Removes your characters pants.",
-	--["removeclothes"] = "Removes your character clothes.",
+	["removeshirt"] = "Removes your characters shirt.",
+	["removetshirt"] = "Removes your characters tshirt",
+	["removepants"] = "Removes your characters pants.",
+	["removeclothes"] = "Removes your character clothes.",
 	["removehatsmesh"] = "Removes your characters hat meshes.",
 	["removegearmesh"] = "Removes your current characters gear mesh.",
-	--["drophats"] = "Drops your characters hats on the map.",
+	["drophats"] = "Drops your characters hats on the map.",
 	["dropgears"] = "Drops your characters gears on the map.",
-	--["hatspam"] = "Spams your hats onto the map.",
-	--["unhatspam"] = "()",
+	["hatspam"] = "Spams your hats onto the map.",
+	["unhatspam"] = "()",
 	["removeface"] = "Removes your characters face.",
 	["removehats"] = "Removes your characters hats.",
 	["rheadmesh"] = "Removes the mesh of your characters head.",
@@ -2271,6 +2271,7 @@ CMDS.commands = {
 	["disablereset"] = "Disables the reset button.",
 	["massjoindate"] = "Shows all players joindates.",
 	["loop"] = "Loops command with arguments.",
+	["loopspeed"] = "Sets the speed of the command loop",
 	["unloop"] = "()",
 	["savetools"] = "Saves tools.",
 	["loadtools"] = "Loads tools.",
@@ -2599,7 +2600,9 @@ CMDS.commands = {
 	["unspawnpoint"] = "Deletes spawn point",
 	["setfpscap"] = "Sets Fps cap, type 'none' for unlimited",
 	["console"] = "Opens a custom Console",
-	["fullbright"] = "Removes shadows and brightens up the game."
+	["fullbright"] = "Removes shadows and brightens up the game.",
+	["headless"] = "Gives you client-sided Headless head.",
+	["sphere"] = "Turns you into a rotating sphere.",
 }
 CMDS.usage = {
 	["promptnew"] = "(str/name)",
@@ -2720,6 +2723,7 @@ CMDS.usage = {
 	["avatar"] = "(name)",
 	["grabip"] = "(plr)",
 	["loop"] = "(str)",
+	["loopspeed"] = "(num)",
 	["hotkeyfly"] = "(key)",
 	["hotkeyxray"] = "(key)",
 	["animsync"] = "(plr)",
@@ -2876,11 +2880,11 @@ CMDS.aliases = {
 	["rlimbs"] = "removelimbs",
 	["ranim"] = "removeanim",
 	["reanim"] = "restoreanim",
-	--["rshirt"] = "removeshirt",
-	--["rtshirt"] = "removetshirt",
-	--["rpants"] = "removepants",
-	--["naked"] = "removeclothes",
-	--["rclothes"] = "removeclothes",
+	["rshirt"] = "removeshirt",
+	["rtshirt"] = "removetshirt",
+	["rpants"] = "removepants",
+	["naked"] = "removeclothes",
+	["rclothes"] = "removeclothes",
 	["rhatsmesh"] = "removehatsmesh",
 	["rhm"] = "removehatsmesh",
 	["rgearmesh"] = "removegearmesh",
@@ -3092,6 +3096,7 @@ CMDS.aliases = {
 	["jdpu"] = "joindatepublic",
 	["pp"] = "ppsize",
 	["gay"] = "gaysize",
+	["lspeed"] = "loopspeed",
 	["match"] = "matchmake",
 	["gtools"] = "grabtools",
 	["ungtools"] = "ungrabtools",
@@ -3395,6 +3400,7 @@ CMDS.aliases = {
 	["unspawn"] = "unspawnpoint",
 	["fpscap"] = "setfpscap",
 	["maxfps"] = "setfpscap",
+	["ball"] = "sphere",
 }
 
 local function suggestions_update()
@@ -5146,7 +5152,7 @@ function useCommand.restoreanim()
 	cmdlp.Character.Animate.Disabled = false
 end
 
---[[function useCommand.removeshirt()
+function useCommand.removeshirt()
 	opx("-","You have removed your shirt")
 	cmdlp.Character.Shirt:Destroy()
 end
@@ -5162,13 +5168,13 @@ function useCommand.removepants()
 end
 
 function useCommand.removeclothes()
-	opx("-","You are now naked on a kids game")
+	opx("-","You are now naked")
 	for _,v in pairs(cmdlp.Character:GetChildren()) do
 		if v.Name == "Shirt" or v.Name == "Shirt Graphic" or v.Name == "Pants" then
 			v:Destroy()
 		end
 	end
-end]]
+end
 
 function useCommand.resizehead()
 	if not cmd15(cmdlp) then
@@ -5270,14 +5276,14 @@ function useCommand.bring()
 	cmdlp.CharacterAdded:Wait()
 end
 
---[[function useCommand.drophats()
+function useCommand.drophats()
 	opx("-","Dropped your hats")
 	for i,v in pairs(cmdlp.Character:GetChildren()) do
 		if v:IsA("Hat") or v:IsA("Accessory") then
 			v.Parent = workspace
 		end
 	end
-end]]
+end
 
 function useCommand.dropgears()
 	opx("-","Dropped your gears")
@@ -5288,7 +5294,7 @@ function useCommand.dropgears()
 	end
 end
 
---[[local hatSpam = false
+local hatSpam = false
 function useCommand.hatspam()
 	opx("-","Now spamming hats")
 	hatSpam = true
@@ -5317,7 +5323,7 @@ end
 function useCommand.unhatspam()
 	opx("-","Stopped spamming hats")
 	hatSpam = false
-end]]
+end
 
 function useCommand.removeface()
 	opx("-","Removed face")
@@ -8289,7 +8295,7 @@ clicktplimit = clicktplimit or 0
 local clicktps = false
 function useCommand.clicktp()
 	clicktps = true
-	opx("-","ClickTP enabled aim at the location and press CTRL to tp")
+	opx("-","ClickTP enabled, press CTRL to teleport")
 	hum = cmdlp.Character.HumanoidRootPart
 	if hotkeyctp == "LeftControl" then
 		cmduis.InputBegan:Connect(function(input)
@@ -12421,6 +12427,7 @@ function useCommand.disablereset()
 end
 
 local looping = false
+local loopsp = 0
 function useCommand.loop()
 	if arguments[2] then
 		looping = true
@@ -12429,13 +12436,22 @@ function useCommand.loop()
 		GoodNew = findCmd(perCmd)
 		opx("-","Now looping that command")
 		while looping do
-			wait()
+			wait(loopsp)
 			arguments = loopStat:split(" ")
 			useCommand[GoodNew]()
 		end
 	else
 		opx("*","2 arguments are needed!")
 	end
+end
+
+function useCommand.loopspeed()
+    if arguments[2] and tonumber(arguments[2]) then
+        loopsp = tonumber(arguments[2])
+		opx("-","Loop speed set to "..loopsp)
+    else
+        opx("*", "Argument 2 should be a number!")
+    end
 end
 
 function useCommand.unloop()
@@ -16104,7 +16120,7 @@ function getRoot(char)
 end
 
 local refreshCmd = false
-function refresh(plr)
+function refreshed(plr)
 	refreshCmd = true
 	local Human = plr.Character and plr.Character:FindFirstChildOfClass("Humanoid", true)
 	local pos = Human and Human.RootPart and Human.RootPart.CFrame
@@ -16210,6 +16226,83 @@ function useCommand.fullbright()
 	cmdl.OutdoorAmbient = Color3.fromRGB(255, 255, 255)
 	cmdl.Outlines = true
 	opx("-", "Fullbright loaded")
+end
+
+function useCommand.headless()
+	cmdlp.Character.Head.face:Destroy()
+	cmdlp.Character.Head.Transparency = 1
+	opx("-", "Headless loaded (Client)")
+end
+
+function useCommand.sphere()
+	local UserInputService = game:GetService("UserInputService")
+	local RunService = game:GetService("RunService")
+	local Camera = workspace.CurrentCamera
+	
+	local SPEED_MULTIPLIER = 30
+	local JUMP_POWER = 60
+	local JUMP_GAP = 0.3
+	
+	local character = game.Players.LocalPlayer.Character
+	
+	for i, v in ipairs(character:GetDescendants()) do
+		if v:IsA("BasePart") then
+			v.CanCollide = false
+		end
+	end
+	
+	local ball = character.HumanoidRootPart
+	ball.Shape = Enum.PartType.Ball
+	ball.Size = Vector3.new(5, 5, 5)
+	local humanoid = character:WaitForChild("Humanoid")
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Blacklist
+	params.FilterDescendantsInstances = {
+		character
+	}
+	
+	local tc = RunService.RenderStepped:Connect(function(delta)
+		ball.CanCollide = true
+		humanoid.PlatformStand = true
+		if UserInputService:GetFocusedTextBox() then
+			return
+		end
+		if UserInputService:IsKeyDown("W") then
+			ball.RotVelocity -= Camera.CFrame.RightVector * delta * SPEED_MULTIPLIER
+		end
+		if UserInputService:IsKeyDown("A") then
+			ball.RotVelocity -= Camera.CFrame.LookVector * delta * SPEED_MULTIPLIER
+		end
+		if UserInputService:IsKeyDown("S") then
+			ball.RotVelocity += Camera.CFrame.RightVector * delta * SPEED_MULTIPLIER
+		end
+		if UserInputService:IsKeyDown("D") then
+			ball.RotVelocity += Camera.CFrame.LookVector * delta * SPEED_MULTIPLIER
+		end
+	--ball.RotVelocity = ball.RotVelocity - Vector3.new(0,ball.RotVelocity.Y/50,0)
+	end)
+	
+	UserInputService.JumpRequest:Connect(function()
+		local result = workspace:Raycast(
+	ball.Position,
+	Vector3.new(
+	0,
+	-((ball.Size.Y / 2) + JUMP_GAP),
+	0
+	),
+	params
+	)
+		if result then
+			ball.Velocity = ball.Velocity + Vector3.new(0, JUMP_POWER, 0)
+		end
+	end)
+	
+	Camera.CameraSubject = ball
+	humanoid.Died:Connect(function()
+		tc:Disconnect()
+	end)
+	opx("-", "You are now a sphere")
+	opx("-", "Run the 'refresh' command to undo")
 end
 
 user.Changed:connect(function()
