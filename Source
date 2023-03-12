@@ -2169,6 +2169,7 @@ CMDS.commands = {
 	["removeterrain"] = "Removes all terrain.",
 	["outputlarger"] = "Makes an output-larger.",
 	["compliment"] = "Compliments player",
+	["joke"] = "Says a joke.",
 	["roast"] = "Roasts player",
 	["rizz"] = "Rizzes player",
 	["singinfo"] = "Lists how to make your own song compatible with sing command.",
@@ -2674,9 +2675,6 @@ CMDS.usage = {
 	["unfind"] = "(plr)",
 	["time"] = "(timezone)",
 	["outputlarger"] = "(str)",
-	["compliment"] = "(plr)",
-	["roast"] = "(plr)",
-	["rizz"] = "(plr)",
 	["sing"] = "(link / preset)",
 	["deletepos"] = "(str)",
 	["gotopos"] = "(behind / infront / left / right / above / under)",
@@ -9669,6 +9667,17 @@ function useCommand.compliment()
 	sayremote:FireServer(tostring(picked_value), "All")
 end
 
+function useCommand.joke()
+	local URL = ("https://official-joke-api.appspot.com/random_joke")
+	local gll = game:HttpGet(URL)
+	local Http = game:GetService("HttpService"):JSONDecode(gll)
+	opx("-",Http.setup)
+	sayremote:FireServer(Http.setup,"All")
+	task.wait(2)
+	opx("-",Http.punchline)
+	sayremote:FireServer(Http.punchline,"All")
+end
+
 function useCommand.roast()
 	local roastPick = {
 		"Anne Frank hid better then you",
@@ -11744,7 +11753,7 @@ function useCommand.lagchat()
 	chatlag = true
 	while chatlag do
 		wait()
-		sayremote:FireServer("_______________________________________", "All")
+		sayremote:FireServer("____________________________________________________________________________________________________________________________________________________________________________________________________","All")
 	end
 end
 
